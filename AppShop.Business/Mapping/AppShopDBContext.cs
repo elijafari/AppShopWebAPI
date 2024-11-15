@@ -1,5 +1,6 @@
 ﻿using AppShop.Business.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ namespace AppShop.Business.Mapping
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("data source=.\\SQLEXPRESS;initial catalog=ShopElectro;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
+            Configuration.GetConnectionString("Connection")
+
+
         }
        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
