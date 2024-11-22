@@ -5,7 +5,7 @@ namespace AppShop.Business.Service.IService
 {
     public interface IProductService
     {
-        void Add(Product entity);
+        void Add(InProduct input);
         void Update(Product entity);
         DataView GetAll(DataRequest param);
     }

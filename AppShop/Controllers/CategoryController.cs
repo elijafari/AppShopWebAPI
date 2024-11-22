@@ -1,6 +1,7 @@
 ﻿using AppShop.Business.Entity;
 using AppShop.Business.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace AppShop.Controllers
 {
@@ -10,10 +11,11 @@ namespace AppShop.Controllers
     {
 
         private readonly ICategoryService service;
-
-        public CategoryController(ICategoryService _service)
+        private readonly ILogService logService;
+        public CategoryController(ICategoryService _service,ILogService _logService)
         {
             service = _service;
+            logService = _logService;
         }
         [HttpPost]
         public void Add()
@@ -33,7 +35,20 @@ namespace AppShop.Controllers
                 Name = "A",
                 Code = 3,
             });
+        }
 
+        [HttpGet]
+        public ActionResult GetAll()
+        {
+            try
+            {
+                return Ok(service.GetAll());
+            }
+            catch (Exception ex)
+            {
+                logService.Add(ex.Message , ex.StackTrace);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

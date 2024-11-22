@@ -15,7 +15,7 @@ namespace AppShop.Business.Service
         public LogService(AppShopDBContext _db) {
         db= _db;
         }
-        public void Add(string message)
+        public void Add(string message ,string stackTrace)
         {
             var entity=new Log();
             entity.Massege= message;

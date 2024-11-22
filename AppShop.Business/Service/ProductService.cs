@@ -2,6 +2,7 @@
 using AppShop.Business.Entity;
 using AppShop.Business.Mapping;
 using AppShop.Business.Service.IService;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,17 @@ namespace AppShop.Business.Service
     public class ProductService : IProductService
     {
         AppShopDBContext db;
-        public ProductService(AppShopDBContext _db)
+        private readonly IMapper mapper;
+        public ProductService(AppShopDBContext _db,IMapper _mapper)
         {
             db = _db;
+            mapper = _mapper;
+
         }
-        public void Add(Product entity)
+        public void Add(InProduct input)
         {
+            var entity = mapper.Map<Product>(input);
+            entity.IsActive=true;
             ValidtionData(entity);
             db.Products.Add(entity);
             db.SaveChanges();
@@ -66,12 +72,9 @@ namespace AppShop.Business.Service
 
         public DataView GetAll(DataRequest param)
         {
-            var result= new DataView(param.Take)
-            {
-                Data = db.Products.OrderBy(x => x.Code).Skip((param.PageNumber - 1)*param.Take).Take(param.Take).Cast<object>().ToList(),
-                TotalCount = db.Products.Count()
-
-            };
+            var result = new DataView(param.Take, param.PageNumber);
+            result.Data = db.Products.OrderBy(x => x.Code).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
+            result.TotalCount = db.Products.Count();
             return result;
         }
     }

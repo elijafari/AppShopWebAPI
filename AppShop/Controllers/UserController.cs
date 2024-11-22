@@ -28,7 +28,7 @@ namespace AppShop.Controllers
             }
             catch (Exception ex)
             {
-                logService.Add(ex.Message+"///"+ex.StackTrace);
+                logService.Add(ex.Message,ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }

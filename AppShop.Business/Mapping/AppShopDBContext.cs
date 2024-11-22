@@ -20,13 +20,13 @@ namespace AppShop.Business.Mapping
         public DbSet<OrderBuy> OrderBuys { get; set; }
         public DbSet<Log> Logs  { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("data source=.\\SQLEXPRESS;initial catalog=ShopElectro;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
-            Configuration.GetConnectionString("Connection")
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    //  optionsBuilder.UseSqlServer("data source=.\\SQLEXPRESS;initial catalog=ShopElectro;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
+        //    Configuration.GetConnectionString("Connection");
 
 
-        }
+        //}
        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

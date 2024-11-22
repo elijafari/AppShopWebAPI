@@ -1,4 +1,5 @@
-﻿using AppShop.Business.DataModel;
+﻿using AppShop.Business;
+using AppShop.Business.DataModel;
 using AppShop.Business.Entity;
 using AppShop.Business.Service;
 using AppShop.Business.Service.IService;
@@ -22,16 +23,32 @@ namespace AppShop.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Product entity)
+        public IActionResult Add([FromForm] IFormFile file)
         {
+            var form = Request.Form;
+
             try
             {
-                service.Add(entity);
+                InProduct input = new InProduct();
+                input.Code =  int.Parse(form[nameof(input.Code).ToCamelCose()]);
+                input.Name = form[nameof(input.Name).ToCamelCose()];
+                input.Price =int.Parse( form[nameof(input.Price).ToCamelCose()]);
+                input.Description = form[nameof(input.Description).ToCamelCose()];
+                input.Path = form[nameof(input.Path).ToCamelCose()];
+
+                string extension = Path.GetExtension(file.FileName);
+                //read the file
+                using (var memoryStream = new MemoryStream())
+                {
+                    file.CopyTo(memoryStream);
+                    input.image = memoryStream.ToArray();
+                }
+                service.Add(input);
                 return Ok();
             }
             catch (Exception ex)
             {
-                logService.Add(ex.Message + "///" + ex.StackTrace);
+                logService.Add(ex.Message , ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
@@ -60,7 +77,7 @@ namespace AppShop.Controllers
             }
             catch (Exception ex)
             {
-                logService.Add(ex.Message + "///" + ex.StackTrace);
+                logService.Add(ex.Message , ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
@@ -76,7 +93,7 @@ namespace AppShop.Controllers
             }
             catch (Exception ex)
             {
-                logService.Add(ex.Message + "///" + ex.StackTrace);
+                logService.Add(ex.Message , ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }

@@ -10,5 +10,6 @@ namespace AppShop.Business.Service.IService
     public interface ICategoryService
     {
         void Add(Category entity);
+        List<Category> GetAll();
     }
 }
