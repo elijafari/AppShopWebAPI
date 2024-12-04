@@ -3,6 +3,7 @@ using AppShop.Business.Entity;
 using AppShop.Business.Mapping;
 using AppShop.Business.Service.IService;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +30,12 @@ namespace AppShop.Business.Service
             db.Products.Add(entity);
             db.SaveChanges();
         }
-        public void Update(Product entity)
-        {
+        public void Update(InProduct input)
+        { 
+            var image=db.Products.AsNoTracking().FirstOrDefault(x=>x.Id==input.Id)?.image;
+            var entity = mapper.Map<Product>(input);
+            if (entity.image.Length ==0)
+                entity.image = image;
             ValidtionData(entity);
             db.Products.Update(entity);
             db.SaveChanges();
@@ -76,6 +81,16 @@ namespace AppShop.Business.Service
             result.Data = db.Products.OrderBy(x => x.Code).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
             result.TotalCount = db.Products.Count();
             return result;
+        }
+        public Product GetById(int id)
+        {
+            return db.Products.Where(x => x.Id == id).SingleOrDefault();
+        }
+        public bool DeleteAll()
+        {
+             db.Products.RemoveRange(db.Products.ToList());
+            return true;
+
         }
     }
 }

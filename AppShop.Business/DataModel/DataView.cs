@@ -28,7 +28,7 @@ namespace AppShop.Business.DataModel
         }
         private int SetStartNumber()
         {
-            return (PageNumber* Take) + 1;
+            return (PageNumber* Take);
         }
     }
 }

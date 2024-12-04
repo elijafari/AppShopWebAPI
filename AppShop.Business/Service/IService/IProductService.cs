@@ -6,7 +6,9 @@ namespace AppShop.Business.Service.IService
     public interface IProductService
     {
         void Add(InProduct input);
-        void Update(Product entity);
+        void Update(InProduct entity);
         DataView GetAll(DataRequest param);
+        Product GetById(int id);
+        bool DeleteAll();
     }
 }

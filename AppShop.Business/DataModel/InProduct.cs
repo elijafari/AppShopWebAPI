@@ -17,5 +17,6 @@ namespace AppShop.Business.DataModel
         public string? Description { get; set; }
         public byte[]? image { get; set; }
         public int Price { get; set; }
+        public int Id { get; set; }
     }
 }
