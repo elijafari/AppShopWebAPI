@@ -25,7 +25,6 @@ namespace AppShop.Business.Service
         public void Add(InProduct input)
         {
             var entity = mapper.Map<Product>(input);
-            entity.IsActive=true;
             ValidtionData(entity);
             db.Products.Add(entity);
             db.SaveChanges();

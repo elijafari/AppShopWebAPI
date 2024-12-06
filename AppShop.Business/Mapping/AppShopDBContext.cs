@@ -19,15 +19,8 @@ namespace AppShop.Business.Mapping
         public DbSet<User> Users { get; set; }
         public DbSet<OrderBuy> OrderBuys { get; set; }
         public DbSet<Log> Logs  { get; set; }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    //  optionsBuilder.UseSqlServer("data source=.\\SQLEXPRESS;initial catalog=ShopElectro;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
-        //    Configuration.GetConnectionString("Connection");
-
-
-        //}
-       protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<ItemBuy> ItemBuies  { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new CategoryMapping());
@@ -35,6 +28,7 @@ namespace AppShop.Business.Mapping
             modelBuilder.ApplyConfiguration(new UserMapping());
             modelBuilder.ApplyConfiguration(new OrderBuyMapping());
             modelBuilder.ApplyConfiguration(new LogMapping());
+            modelBuilder.ApplyConfiguration(new ItemBuyMapping());
         }
     }
 }

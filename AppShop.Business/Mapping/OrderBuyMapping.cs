@@ -13,12 +13,10 @@ namespace AppShop.Business.Mapping
             builder.HasKey(c => c.Id);
             builder.Property(p => p.Id).UseIdentityColumn();
             builder.Property(p => p.IdUser).IsRequired();
-            builder.Property(p => p.IdProduct).IsRequired();
             builder.Property(p => p.DateDelivery).IsRequired();
-            builder.Property(p => p.Number).IsRequired();
-            builder.Property(p => p.Price).IsRequired();
             builder.Property(p => p.Statues).IsRequired();
-            builder.Property(p => p.DateOrder).IsRequired().HasColumnType("nvarchar(50)");
+            builder.Property(p => p.DateOrder).IsRequired();
+            builder.Property(p => p.TrackingCode).UseIdentityColumn(1001);
 
         }
     }

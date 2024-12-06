@@ -16,5 +16,6 @@ namespace AppShop.Business.Service
         {
             return $"{nameField} تکراری است";
         }
+        public static string NotFoundProduct => "کالای مورد نظر یافت نشد";
     }
 }

@@ -1,9 +1,12 @@
-﻿using AppShop.Business.Entity;
+﻿using AppShop.Business.DataModel;
+using AppShop.Business.Entity;
+using AutoMapper;
 
 namespace AppShop.Business.Service.IService
 {
     public interface IOrderBuyService
     {
-        void Add(OrderBuy entity);
+        decimal Add(InOrderBuy input);
+        void ChangeShopStatues(int id, ShopStatues shopStatues);
     }
 }
