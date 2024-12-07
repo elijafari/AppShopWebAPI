@@ -94,12 +94,11 @@ namespace AppShop.Controllers
             [HttpPost]
         public ActionResult GetAllUser (InputRequest inputRequest)
         {
-                //push 25 aban 1403
-
                 try
                 {
+                      var userId = 1;
                     var param = new DataRequest(inputRequest.PageNumber, 100);
-                    return Ok(service.GetAll(param));
+                    return Ok(service.GetAllUser(param,userId));
                 }
                 catch (Exception ex)
                 {

@@ -23,5 +23,13 @@ namespace AppShop.Business.Service
             db.Users.Add(entity);
             db.SaveChanges();
         }
+        public User Get(string userName,string passWord)
+        {       
+           var result= db.Users.Where(x => x.UserName ==userName && x.Password==passWord).FirstOrDefault(); 
+            if(result==null)
+                throw new Exception("نام کاربری یا رمز عبور یافت نشد");
+            return result;
+
+        }
     }
 }
