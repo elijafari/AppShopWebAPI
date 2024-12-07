@@ -45,5 +45,23 @@ namespace AppShop.Business.Service
             else
                 throw new Exception(Utility.NotFoundProduct);
         }
+        public DataView GetAll(DataRequest param)
+        {
+            var result = new DataView(param.Take, param.PageNumber);
+            result.Data = db.OrderBuys.OrderByDesc(x => x.Code).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
+            result.TotalCount = db.Products.Count();
+            return result;
+        }
+        public DataView GetAllUser(DataRequest param ,int userId)
+        {
+            var result = new DataView(param.Take, param.PageNumber);
+            result.Data = db.OrderBuys.Where(x => x.UserId=userId).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
+            result.TotalCount = db.Products.Count();
+            return result;
+        }
+        public OrderBuy GetById(int id)
+        {
+            return db.OrderBuys.Where(x => x.Id == id).SingleOrDefault();
+        }
     }
 }
