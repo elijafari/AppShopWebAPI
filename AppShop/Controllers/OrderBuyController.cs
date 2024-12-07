@@ -76,5 +76,41 @@ namespace AppShop.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [HttpPost]
+        public ActionResult GetAll(InputRequest inputRequest)
+        {
+            //push 25 aban 1403
+            try
+            {
+                var param = new DataRequest(inputRequest.PageNumber, 100);
+                return Ok(service.GetAll(param));
+            }
+            catch (Exception ex)
+            {
+                logService.Add(ex.Message, ex.StackTrace);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+            [HttpPost]
+        public ActionResult GetAllUser (InputRequest inputRequest)
+        {
+                //push 25 aban 1403
+
+                try
+                {
+                    var param = new DataRequest(inputRequest.PageNumber, 100);
+                    return Ok(service.GetAll(param));
+                }
+                catch (Exception ex)
+                {
+                    logService.Add(ex.Message, ex.StackTrace);
+                    return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                }
+            }
+        [HttpPost]
+        public ActionResult GetById(int id)
+        {
+            return db.OrderBuys.Where(x => x.Id == id).SingleOrDefault();
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace AppShop.Business.Mapping
         public DbSet<OrderBuy> OrderBuys { get; set; }
         public DbSet<Log> Logs  { get; set; }
         public DbSet<ItemBuy> ItemBuies  { get; set; }
+        public DbSet<OrderBuyStatues> OrderBuyStatues { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -29,6 +30,7 @@ namespace AppShop.Business.Mapping
             modelBuilder.ApplyConfiguration(new OrderBuyMapping());
             modelBuilder.ApplyConfiguration(new LogMapping());
             modelBuilder.ApplyConfiguration(new ItemBuyMapping());
+            modelBuilder.ApplyConfiguration(new OrderBuyStatuesMapping());
         }
     }
 }

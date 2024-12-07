@@ -1,6 +1,5 @@
 ﻿using AppShop.Business.DataModel;
 using AppShop.Business.Entity;
-using AutoMapper;
 
 namespace AppShop.Business.Service.IService
 {
@@ -8,5 +7,8 @@ namespace AppShop.Business.Service.IService
     {
         decimal Add(InOrderBuy input);
         void ChangeShopStatues(int id, ShopStatues shopStatues);
+        DataView GetAll(DataRequest param);
+        DataView GetAllUser(DataRequest param, int userId);
+        OrderBuy GetById(int id);
     }
 }

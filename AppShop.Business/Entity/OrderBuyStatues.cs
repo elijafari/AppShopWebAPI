@@ -11,5 +11,6 @@ namespace AppShop.Business.Entity
         public int IdOrder { get; set; }
         public DateTime DateStatues { get; set; }
         public int Statues { get; set; }
+        public virtual OrderBuy  OrderBuy {get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace AppShop.Business.Entity
     {
         public OrderBuy()
         {
-                ItemBuys=new List<ItemBuy>();
+            OrderBuyStatues = new List<OrderBuyStatues>();
         }
         public int IdUser { get; set; }
         public DateTime DateOrder { get; set; }
@@ -19,6 +19,8 @@ namespace AppShop.Business.Entity
         public decimal TrackingCode { get; set; }
         public virtual User UserEntity { get; set; }
         public virtual List<ItemBuy> ItemBuys { get; set; }
+        public virtual List<OrderBuyStatues> OrderBuyStatues { get; set; }
+
 
     }
 }

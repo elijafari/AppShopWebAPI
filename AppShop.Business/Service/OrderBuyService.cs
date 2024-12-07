@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AppShop.Business.Service
 {
-    public class OrderBuyService:IOrderBuyService
+    public class OrderBuyService : IOrderBuyService
     {
         AppShopDBContext db;
         private readonly IMapper mapper;
@@ -29,16 +29,27 @@ namespace AppShop.Business.Service
             entity.DateOrder = DateTime.Now;
             entity.Statues = (int)ShopStatues.Register;
             entity.ItemBuys.AddRange(mapper.Map<List<ItemBuy>>(input.Items));
+
+            var statues = new OrderBuyStatues();
+            statues.Statues = (int)ShopStatues.Register;
+            statues.DateStatues = DateTime.Now;
+            entity.OrderBuyStatues.Add(statues);
+
             db.OrderBuys.Add(entity);
             db.SaveChanges();
             return entity.TrackingCode;
         }
-        public void ChangeShopStatues(int id , ShopStatues shopStatues)
+        public void ChangeShopStatues(int id, ShopStatues shopStatues)
         {
             var entity = db.OrderBuys.AsNoTracking().FirstOrDefault(x => x.Id == id);
             if (entity != null)
             {
-                entity.Statues = (int)ShopStatues.Confirm;
+                var statues = new OrderBuyStatues();
+                statues.Statues = (int)shopStatues;
+                statues.DateStatues = DateTime.Now;
+                entity.OrderBuyStatues.Add(statues);
+
+                entity.Statues = (int)shopStatues;
                 db.OrderBuys.Update(entity);
                 db.SaveChanges();
             }
@@ -52,10 +63,10 @@ namespace AppShop.Business.Service
             result.TotalCount = db.Products.Count();
             return result;
         }
-        public DataView GetAllUser(DataRequest param ,int userId)
+        public DataView GetAllUser(DataRequest param, int userId)
         {
             var result = new DataView(param.Take, param.PageNumber);
-            result.Data = db.OrderBuys.Where(x => x.UserId=userId).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
+            result.Data = db.OrderBuys.Where(x => x.UserId = userId).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
             result.TotalCount = db.Products.Count();
             return result;
         }
