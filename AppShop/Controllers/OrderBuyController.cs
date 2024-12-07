@@ -109,7 +109,15 @@ namespace AppShop.Controllers
         [HttpPost]
         public ActionResult GetById(int id)
         {
-            return db.OrderBuys.Where(x => x.Id == id).SingleOrDefault();
+            try
+            {
+                return Ok(service.GetById(id));
+            }
+            catch (Exception ex)
+            {
+                logService.Add(ex.Message, ex.StackTrace);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

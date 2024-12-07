@@ -22,9 +22,9 @@ namespace AppShop.Business.Service
             mapper = _mapper;
 
         }
-       public List<OrderBuyStatues> GetById(int orderBuyId)
+       public List<OrderBuyStatues> GetById(int IdOrder)
         {
-            return db.OrderBuys.Where(x => x.OrderBuyId == orderBuyId).SingleOrDefault();
+            return db.OrderBuyStatues.Where(x => x.IdOrder == IdOrder).ToList();
         }
     }
 }

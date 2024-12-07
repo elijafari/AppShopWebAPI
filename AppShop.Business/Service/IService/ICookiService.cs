@@ -1,4 +1,5 @@
-﻿using AppShop.Business.Entity;
+﻿using AppShop.Business.DataModel;
+using AppShop.Business.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace AppShop.Business.Service.IService
 {
     public interface ICookiService
     {
-        void SetCooki(User user);
+        DataCooki SetAuthentication(User user);
     }
 }

@@ -30,7 +30,9 @@ namespace AppShop.Controllers
             try
             {
                 service.Add(entity);
-                cookiService.SetCooki(entity);
+              var resultAuth=  cookiService.SetAuthentication(entity);
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(resultAuth.ClaimsIdentity));
+         //    HttpContext.SignOutAsync(  CookieAuthenticationDefaults.AuthenticationScheme);
                 return Ok();
             }
             catch (Exception ex)
@@ -40,12 +42,27 @@ namespace AppShop.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Add(InUser input)
+        public IActionResult SignIn(InUser input)
         {
             try
             {
-               var entity= service.Get(input.UserName,input.Password);
-                cookiService.SetCooki(entity);
+                var entity = service.Get(input.UserName, input.Password);
+                var resultAuth = cookiService.SetAuthentication(entity);
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(resultAuth.ClaimsIdentity));
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                logService.Add(ex.Message, ex.StackTrace);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [HttpPost]
+        public IActionResult SignOut(InUser input)
+        {
+            try
+            {
+                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 return Ok();
             }
             catch (Exception ex)

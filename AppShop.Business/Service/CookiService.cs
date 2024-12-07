@@ -1,5 +1,8 @@
-﻿using AppShop.Business.Entity;
+﻿using AppShop.Business.DataModel;
+using AppShop.Business.Entity;
 using AppShop.Business.Service.IService;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +15,9 @@ namespace AppShop.Business.Service
 {
     public class CookiService: ICookiService
     {
-        public void SetCooki(User user)
+        public DataCooki SetAuthentication(User user)
         {
+            var result = new DataCooki();
             var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Name),
@@ -21,10 +25,10 @@ namespace AppShop.Business.Service
             new Claim(ClaimTypes.Role, user.Type.ToString()),
         };
 
-            var claimsIdentity = new ClaimsIdentity(
+           result.ClaimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var authProperties = new AuthenticationProperties
+            result.AuthProperties = new AuthenticationProperties
             {
                 //AllowRefresh = <bool>,
                 // Refreshing the authentication session should be allowed.
@@ -47,18 +51,14 @@ namespace AppShop.Business.Service
                 // The full path or absolute URI to be used as an http 
                 // redirect response value.
             };
-
-            HttpContext.SignInAsync(
-               CookieAuthenticationDefaults.AuthenticationScheme,
-               new ClaimsPrincipal(claimsIdentity),
-               authProperties);
+            return result;
         }
 
-        public void SingOut()
-        {
-            HttpContext.SignOutAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme);
+        //public void SingOut()
+        //{
+        //    HttpContext.SignOutAsync(
+        //    CookieAuthenticationDefaults.AuthenticationScheme);
 
-        }
+        //}
     }
 }

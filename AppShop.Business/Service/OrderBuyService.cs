@@ -37,6 +37,8 @@ namespace AppShop.Business.Service
 
             db.OrderBuys.Add(entity);
             db.SaveChanges();
+
+
             return entity.TrackingCode;
         }
         public void ChangeShopStatues(int id, ShopStatues shopStatues)
@@ -59,14 +61,14 @@ namespace AppShop.Business.Service
         public DataView GetAll(DataRequest param)
         {
             var result = new DataView(param.Take, param.PageNumber);
-            result.Data = db.OrderBuys.OrderByDesc(x => x.Code).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
+            result.Data = db.OrderBuys.OrderByDescending(x => x.DateOrder).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
             result.TotalCount = db.Products.Count();
             return result;
         }
         public DataView GetAllUser(DataRequest param, int userId)
         {
             var result = new DataView(param.Take, param.PageNumber);
-            result.Data = db.OrderBuys.Where(x => x.UserId = userId).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
+            result.Data = db.OrderBuys.Where(x => x.IdUser == userId).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
             result.TotalCount = db.Products.Count();
             return result;
         }
