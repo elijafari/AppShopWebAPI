@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
 using AppShop.Business.DataModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppShop.Controllers
 {
@@ -57,8 +58,9 @@ namespace AppShop.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [Authorize]
         [HttpPost]
-        public IActionResult SignOut(InUser input)
+        public IActionResult SignOut()
         {
             try
             {

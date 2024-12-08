@@ -76,5 +76,15 @@ namespace AppShop.Business.Service
         {
             return db.OrderBuys.Where(x => x.Id == id).SingleOrDefault();
         }
+        public List<KeyValue> GetDays()
+        {
+            var result = new List<KeyValue>();
+            for (int i = 0; i < 7; ++i)
+            {
+                var date = DateTime.Now.AddDays(i);
+                result.Add(new KeyValue(date, Utility.GetPersion(date) + " " + Utility.GetDay(date)));
+            }
+            return result;
+        }
     }
 }

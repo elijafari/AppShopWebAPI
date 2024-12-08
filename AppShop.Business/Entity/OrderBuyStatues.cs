@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AppShop.Business.Service;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,5 +14,9 @@ namespace AppShop.Business.Entity
         public DateTime DateStatues { get; set; }
         public int Statues { get; set; }
         public virtual OrderBuy  OrderBuy {get; set; }
+        [NotMapped]
+        public string StrStatues { get { return  Enumerations.GetEnumDescription((ShopStatues)Statues); } }
+        [NotMapped]
+        public string PersionDate { get { return Utility.GetPersion(DateStatues); } }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AppShop.Business.Service;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +22,8 @@ namespace AppShop.Business.Entity
         public virtual User UserEntity { get; set; }
         public virtual List<ItemBuy> ItemBuys { get; set; }
         public virtual List<OrderBuyStatues> OrderBuyStatues { get; set; }
+        [NotMapped]
+        public string StrStatues { get { return Enumerations.GetEnumDescription((ShopStatues)Statues); } }
 
 
     }

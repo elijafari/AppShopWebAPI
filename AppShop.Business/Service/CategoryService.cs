@@ -20,9 +20,12 @@ namespace AppShop.Business.Service
             db.Categories.Add(entity);
             db.SaveChanges();
         }
-        public List<Category> GetAll()
+        public List<Category> GetAll(bool tagAll)
         {
-            return db.Categories.OrderBy(c => c.Name).ToList();
+          var list= db.Categories.OrderBy(c => c.Name).ToList();
+            if(tagAll) 
+                list.insert(0,new Category() { Id=0, Name="همه کالا ها"});
+            return list;
         }
     }
 }

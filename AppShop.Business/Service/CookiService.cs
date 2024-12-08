@@ -15,6 +15,18 @@ namespace AppShop.Business.Service
 {
     public class CookiService: ICookiService
     {
+        private readonly IHttpContextAccessor _http;
+        public CookiService(IHttpContextAccessor http)
+        {
+            _http = http;
+        }
+        public void IsLogin()
+        {
+            //todo
+            var result= _http.HttpContext.User.Claims?.Any(x => x.Type == ClaimTypes.Name);
+            if (!result)
+                throw new Exception("لطفا برای ادامه عملیات به سیستم وارد شود");
+        }
         public DataCooki SetAuthentication(User user)
         {
             var result = new DataCooki();

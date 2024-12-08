@@ -11,5 +11,7 @@ namespace AppShop.Business.Service.IService
     public interface ICookiService
     {
         DataCooki SetAuthentication(User user);
+        void IsLogin();
+
     }
 }

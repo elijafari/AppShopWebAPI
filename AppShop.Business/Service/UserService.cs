@@ -1,4 +1,5 @@
-﻿using AppShop.Business.Entity;
+﻿using AppShop.Business.DataModel;
+using AppShop.Business.Entity;
 using AppShop.Business.Mapping;
 using AppShop.Business.Service.IService;
 using System;
@@ -23,13 +24,12 @@ namespace AppShop.Business.Service
             db.Users.Add(entity);
             db.SaveChanges();
         }
-        public User Get(string userName,string passWord)
-        {       
-           var result= db.Users.Where(x => x.UserName ==userName && x.Password==passWord).FirstOrDefault(); 
-            if(result==null)
+        public User Get(string userName, string passWord)
+        {
+            var result = db.Users.Where(x => x.UserName == userName && x.Password == passWord).FirstOrDefault();
+            if (result == null)
                 throw new Exception("نام کاربری یا رمز عبور یافت نشد");
             return result;
-
         }
     }
 }

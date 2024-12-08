@@ -16,7 +16,14 @@ namespace AppShop.Business.DataModel
 
         public int PageNumber { get;  set; }
         public int Take { get;  set; }
-        
+        public Filter Filter { get; set; }
 
+    }
+    public class Filter
+    {
+        public int  CategoryId { get; set; }
+        public int  Name { get; set; }
+        public int FromPrice{ get; set; }
+        public int ToPrice { get; set; }
     }
 }

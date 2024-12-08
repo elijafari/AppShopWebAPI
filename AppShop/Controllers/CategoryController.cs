@@ -42,11 +42,24 @@ namespace AppShop.Controllers
         {
             try
             {
-                return Ok(service.GetAll());
+                return Ok(service.GetAll(false));
             }
             catch (Exception ex)
             {
-                logService.Add(ex.Message , ex.StackTrace);
+                logService.Add(ex.Message, ex.StackTrace);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [HttpGet]
+        public ActionResult GetAllForSearch()
+        {
+            try
+            {
+                return Ok(service.GetAll(true));
+            }
+            catch (Exception ex)
+            {
+                logService.Add(ex.Message, ex.StackTrace);
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }

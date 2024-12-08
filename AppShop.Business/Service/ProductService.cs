@@ -77,8 +77,21 @@ namespace AppShop.Business.Service
         public DataView GetAll(DataRequest param)
         {
             var result = new DataView(param.Take, param.PageNumber);
-            result.Data = db.Products.OrderBy(x => x.Code).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
-            result.TotalCount = db.Products.Count();
+            var query = db.Products;
+             
+            if (param.Filter.CategoryId != 0)
+                query = query.Where(x => x.CategoryId == param.Filter.CategoryId);
+            if (param.Filter.Name != 0)
+                query = query.Where(x => x.Name.Contains(param.Filter.Name));
+            if (param.Filter.FromPrice != 0)
+                query = query.Where(x => x.Price >= param.Filter.FromPrice);
+            if (param.Filter.ToPrice != 0)
+                query = query.Where(x => x.Price <= param.Filter.ToPrice);
+                
+                
+                
+            result.Data = query.OrderBy(x => x.Code).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
+            result.TotalCount =query.Count();
             return result;
         }
         public Product GetById(int id)
