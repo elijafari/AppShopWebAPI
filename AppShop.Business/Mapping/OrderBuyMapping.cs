@@ -16,7 +16,7 @@ namespace AppShop.Business.Mapping
             builder.Property(p => p.DateDelivery).IsRequired();
             builder.Property(p => p.Statues).IsRequired();
             builder.Property(p => p.DateOrder).IsRequired();
-            builder.Property(p => p.TrackingCode).UseIdentityColumn(1001);
+            builder.Property(p => p.TrackingCode).ValueGeneratedOnAdd().HasDefaultValue(1000);
 
         }
     }

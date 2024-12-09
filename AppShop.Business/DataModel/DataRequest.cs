@@ -19,11 +19,4 @@ namespace AppShop.Business.DataModel
         public Filter Filter { get; set; }
 
     }
-    public class Filter
-    {
-        public int  CategoryId { get; set; }
-        public string   Name { get; set; }
-        public int FromPrice{ get; set; }
-        public int ToPrice { get; set; }
-    }
 }

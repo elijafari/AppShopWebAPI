@@ -104,6 +104,7 @@ namespace AppShop.Controllers
             try
             {
                 var param = new DataRequest(inputRequest.PageNumber, 20);
+                param.Filter = inputRequest.Filter;
                 return Ok(service.GetAll(param));
             }
             catch (Exception ex)

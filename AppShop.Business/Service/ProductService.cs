@@ -79,18 +79,16 @@ namespace AppShop.Business.Service
             var result = new DataView(param.Take, param.PageNumber);
 
             var query = from p in db.Products select p;
-             
-            if (param.Filter.CategoryId != 0)
-                query = query.Where(x => x.CategoryId == param.Filter.CategoryId);
-            if (param.Filter.Name != string.Empty)
-                query = query.Where(x => x.Name.Contains(param.Filter.Name));
-            if (param.Filter.FromPrice != 0)
-                query = query.Where(x => x.Price >= param.Filter.FromPrice);
-            if (param.Filter.ToPrice != 0)
-                query = query.Where(x => x.Price <= param.Filter.ToPrice);
-                
-                
-                
+              if (param.Filter.CategoryId != 0)
+                    query = query.Where(x => x.CategoryId == param.Filter.CategoryId);
+                if (param.Filter.ProductName!= string.Empty)
+                    query = query.Where(x => x.Name.Contains(param.Filter.ProductName));
+                if (param.Filter.FromPrice != 0)
+                    query = query.Where(x => x.Price >= param.Filter.FromPrice);
+                if (param.Filter.ToPrice != 0)
+                    query = query.Where(x => x.Price <= param.Filter.ToPrice);
+
+ 
             result.Data = query.OrderBy(x => x.Code).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
             result.TotalCount =query.Count();
             return result;
