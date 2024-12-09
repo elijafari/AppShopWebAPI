@@ -1,4 +1,5 @@
 ﻿using AppShop.Business.Service;
+using EnumsNET;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,13 +18,13 @@ namespace AppShop.Business.Entity
         public int IdUser { get; set; }
         public DateTime DateOrder { get; set; }
         public DateTime DateDelivery { get; set; }
-        public int Statues { get; set; }
+        public ShopStatues Statues { get; set; }
         public decimal TrackingCode { get; set; }
         public virtual User UserEntity { get; set; }
         public virtual List<ItemBuy> ItemBuys { get; set; }
         public virtual List<OrderBuyStatues> OrderBuyStatues { get; set; }
         [NotMapped]
-        public string StrStatues { get { return Enumerations.GetEnumDescription((ShopStatues)Statues); } }
+        public string StrStatues { get { return Statues.GetEnumDescription(); } }
 
 
     }

@@ -10,6 +10,6 @@ namespace AppShop.Business.Service.IService
         DataView GetAll(DataRequest param);
         DataView GetAllUser(DataRequest param, int userId);
         OrderBuy GetById(int id);
-        List<string> GetDays();
+        List<KeyValue> GetDays();
     }
 }

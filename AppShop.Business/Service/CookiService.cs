@@ -3,6 +3,7 @@ using AppShop.Business.Entity;
 using AppShop.Business.Service.IService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace AppShop.Business.Service
         {
             //todo
             var result= _http.HttpContext.User.Claims?.Any(x => x.Type == ClaimTypes.Name);
-            if (!result)
+            if (result!=null || result==false)
                 throw new Exception("لطفا برای ادامه عملیات به سیستم وارد شود");
         }
         public DataCooki SetAuthentication(User user)

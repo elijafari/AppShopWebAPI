@@ -22,7 +22,7 @@ namespace AppShop.Business.DataModel
     public class Filter
     {
         public int  CategoryId { get; set; }
-        public int  Name { get; set; }
+        public string   Name { get; set; }
         public int FromPrice{ get; set; }
         public int ToPrice { get; set; }
     }

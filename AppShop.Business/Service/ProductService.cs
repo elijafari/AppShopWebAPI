@@ -77,11 +77,12 @@ namespace AppShop.Business.Service
         public DataView GetAll(DataRequest param)
         {
             var result = new DataView(param.Take, param.PageNumber);
-            var query = db.Products;
+
+            var query = from p in db.Products select p;
              
             if (param.Filter.CategoryId != 0)
                 query = query.Where(x => x.CategoryId == param.Filter.CategoryId);
-            if (param.Filter.Name != 0)
+            if (param.Filter.Name != string.Empty)
                 query = query.Where(x => x.Name.Contains(param.Filter.Name));
             if (param.Filter.FromPrice != 0)
                 query = query.Where(x => x.Price >= param.Filter.FromPrice);

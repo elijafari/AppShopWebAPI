@@ -12,10 +12,10 @@ namespace AppShop.Business.Entity
     {
         public int IdOrder { get; set; }
         public DateTime DateStatues { get; set; }
-        public int Statues { get; set; }
+        public ShopStatues Statues { get; set; }
         public virtual OrderBuy  OrderBuy {get; set; }
         [NotMapped]
-        public string StrStatues { get { return  Enumerations.GetEnumDescription((ShopStatues)Statues); } }
+        public string StrStatues { get { return Statues.GetEnumDescription(); } }
         [NotMapped]
         public string PersionDate { get { return Utility.GetPersion(DateStatues); } }
     }

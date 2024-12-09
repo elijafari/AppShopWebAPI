@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AppShop.Business.Service
 {
-    public class CategoryService:ICategoryService
+    public class CategoryService : ICategoryService
     {
         AppShopDBContext db;    
         public CategoryService(AppShopDBContext _db) {
@@ -24,7 +24,7 @@ namespace AppShop.Business.Service
         {
           var list= db.Categories.OrderBy(c => c.Name).ToList();
             if(tagAll) 
-                list.insert(0,new Category() { Id=0, Name="همه کالا ها"});
+                list.Insert(0,new Category() { Id=0, Name="همه کالا ها"});
             return list;
         }
     }

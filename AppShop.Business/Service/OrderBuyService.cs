@@ -27,11 +27,11 @@ namespace AppShop.Business.Service
             var entity = mapper.Map<OrderBuy>(input);
             entity.IdUser = 1;
             entity.DateOrder = DateTime.Now;
-            entity.Statues = (int)ShopStatues.Register;
+            entity.Statues = ShopStatues.Register;
             entity.ItemBuys.AddRange(mapper.Map<List<ItemBuy>>(input.Items));
 
             var statues = new OrderBuyStatues();
-            statues.Statues = (int)ShopStatues.Register;
+            statues.Statues = ShopStatues.Register;
             statues.DateStatues = DateTime.Now;
             entity.OrderBuyStatues.Add(statues);
 
@@ -47,11 +47,11 @@ namespace AppShop.Business.Service
             if (entity != null)
             {
                 var statues = new OrderBuyStatues();
-                statues.Statues = (int)shopStatues;
+                statues.Statues = shopStatues;
                 statues.DateStatues = DateTime.Now;
                 entity.OrderBuyStatues.Add(statues);
 
-                entity.Statues = (int)shopStatues;
+                entity.Statues = shopStatues;
                 db.OrderBuys.Update(entity);
                 db.SaveChanges();
             }
