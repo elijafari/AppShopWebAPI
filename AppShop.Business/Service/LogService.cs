@@ -23,7 +23,7 @@ namespace AppShop.Business.Service
             entity.UserId= 1;
             db.Logs.Add(entity);
             db.SaveChanges();
-            throw new Exception(message);
+          //  throw new Exception(message);
         }
     }
 }

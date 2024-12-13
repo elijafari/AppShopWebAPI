@@ -16,20 +16,23 @@ namespace AppShop.Business.Service
 {
     public class CookiService: ICookiService
     {
-        private readonly IHttpContextAccessor _http;
-        public CookiService(IHttpContextAccessor http)
-        {
-            _http = http;
-        }
-        public void IsLogin()
-        {
-            //todo
-            var result= _http.HttpContext.User.Claims?.Any(x => x.Type == ClaimTypes.Name);
-            if (result!=null || result==false)
-                throw new Exception("لطفا برای ادامه عملیات به سیستم وارد شود");
-        }
+        //private readonly IHttpContextAccessor _http;
+        //public CookiService(IHttpContextAccessor http)
+        //{
+        //    _http = http;
+        //}
+        //public void IsLogin()
+        //{
+        //    //todo
+        //    var result= _http.HttpContext.User.Claims?.Any(x => x.Type == ClaimTypes.Name);
+        //    if (result!=null || result==false)
+        //        throw new Exception("لطفا برای ادامه عملیات به سیستم وارد شود");
+        //}
         public DataCooki SetAuthentication(User user)
-        {
+
+        { 
+       string name = CookieAuthenticationDefaults.AuthenticationScheme;
+          //  string name = "MyAuthScheme";
             var result = new DataCooki();
             var claims = new List<Claim>
         {
@@ -38,8 +41,7 @@ namespace AppShop.Business.Service
             new Claim(ClaimTypes.Role, user.Type.ToString()),
         };
 
-           result.ClaimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+           result.ClaimsIdentity = new ClaimsIdentity(claims, name);
 
             result.AuthProperties = new AuthenticationProperties
             {

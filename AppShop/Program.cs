@@ -25,11 +25,18 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+//builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderBuyService, OrderBuyService>();
 builder.Services.AddScoped<ILogService,LogService>();
+builder.Services.AddScoped<ICookiService,CookiService>();
+builder.Services.AddScoped<IOrderBuyStatuesService,OrderBuyStatuesService>();
+
+
 
 builder.Services.AddCors(options => {
     options.AddPolicy("CORSPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
@@ -38,10 +45,23 @@ builder.Services.AddCors(options => {
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;
         options.AccessDeniedPath = "/Forbidden/";
     });
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+});
+//builder.Services.AddAuthentication("MyAuthScheme")
+//    .AddCookie("MyAuthScheme", options => {
+//        options.LoginPath = "/Login";
+//        options.LogoutPath = "/Logout";
+//        options.AccessDeniedPath = "/AccessDenied";
+//    });
 //var allowedOrigin = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
 // Add services to the container.
