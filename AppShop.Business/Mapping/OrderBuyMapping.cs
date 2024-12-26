@@ -12,7 +12,7 @@ namespace AppShop.Business.Mapping
             builder.ToTable("OrderBuy");
             builder.HasKey(c => c.Id);
             builder.Property(p => p.Id).UseIdentityColumn();
-            builder.Property(p => p.IdUser).IsRequired();
+            builder.Property(p => p.UserId).IsRequired();
             builder.Property(p => p.DateDelivery).IsRequired();
             builder.Property(p => p.Statues).IsRequired();
             builder.Property(p => p.DateOrder).IsRequired();

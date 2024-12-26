@@ -15,7 +15,7 @@ namespace AppShop.Business.Entity
         {
             OrderBuyStatues = new List<OrderBuyStatues>();
         }
-        public int IdUser { get; set; }
+        public Guid UserId { get; set; }
         public DateTime DateOrder { get; set; }
         public DateTime DateDelivery { get; set; }
         public ShopStatues Statues { get; set; }

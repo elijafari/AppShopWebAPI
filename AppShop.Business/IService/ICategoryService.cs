@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppShop.Business.Service.IService
+namespace AppShop.Business.IService
 {
     public interface ICategoryService
     {

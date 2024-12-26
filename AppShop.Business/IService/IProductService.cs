@@ -1,7 +1,7 @@
 ﻿using AppShop.Business.DataModel;
 using AppShop.Business.Entity;
 
-namespace AppShop.Business.Service.IService
+namespace AppShop.Business.IService
 {
     public interface IProductService
     {

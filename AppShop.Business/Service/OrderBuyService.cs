@@ -1,7 +1,7 @@
 ﻿using AppShop.Business.DataModel;
 using AppShop.Business.Entity;
+using AppShop.Business.IService;
 using AppShop.Business.Mapping;
-using AppShop.Business.Service.IService;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,7 +25,7 @@ namespace AppShop.Business.Service
         public decimal Add(InOrderBuy input)
         {
             var entity = mapper.Map<OrderBuy>(input);
-            entity.IdUser = 1;
+            entity.UserId = Guid.NewGuid();
             entity.DateOrder = DateTime.Now;
             entity.Statues = ShopStatues.Register;
             entity.ItemBuys.AddRange(mapper.Map<List<ItemBuy>>(input.Items));
@@ -65,10 +65,10 @@ namespace AppShop.Business.Service
             result.TotalCount = db.Products.Count();
             return result;
         }
-        public DataView GetAllUser(DataRequest param, int userId)
+        public DataView GetAllUser(DataRequest param, Guid userId)
         {
             var result = new DataView(param.Take, param.PageNumber);
-            result.Data = db.OrderBuys.Where(x => x.IdUser == userId).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
+            result.Data = db.OrderBuys.Where(x => x.UserId == userId).Skip(result.StartRow).Take(param.Take).Cast<object>().ToList();
             result.TotalCount = db.Products.Count();
             return result;
         }

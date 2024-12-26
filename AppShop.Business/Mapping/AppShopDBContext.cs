@@ -1,16 +1,10 @@
 ﻿using AppShop.Business.Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppShop.Business.Mapping
 {
-
-    public class AppShopDBContext : DbContext
+    public class AppShopDBContext :IdentityDbContext<User>
     {  
         public AppShopDBContext(DbContextOptions<AppShopDBContext> options): base(options)
     { }
@@ -26,7 +20,6 @@ namespace AppShop.Business.Mapping
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new CategoryMapping());
             modelBuilder.ApplyConfiguration(new ProductMapping());
-            modelBuilder.ApplyConfiguration(new UserMapping());
             modelBuilder.ApplyConfiguration(new OrderBuyMapping());
             modelBuilder.ApplyConfiguration(new LogMapping());
             modelBuilder.ApplyConfiguration(new ItemBuyMapping());

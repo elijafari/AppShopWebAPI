@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppShop.Business.Service.IService
+namespace AppShop.Business.IService
 {
     public interface ILogService
     {
-        void Add(string message,string stackTrace);
+        void Add(string message, string stackTrace);
     }
 }

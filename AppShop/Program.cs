@@ -1,18 +1,18 @@
 using AppShop.Business;
+using AppShop.Business.Entity;
+using AppShop.Business.ErrorHandle;
+using AppShop.Business.IService;
 using AppShop.Business.Mapping;
 using AppShop.Business.Service;
-using AppShop.Business.Service.IService;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAuthorization();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppShopDBContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
@@ -24,59 +24,59 @@ var mapperConfig = new MapperConfiguration(mc =>
 
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
+builder.Services.AddIdentityApiEndpoints<User>()
+    .AddEntityFrameworkStores<AppShopDBContext>()
+  .AddErrorDescriber<UserIdentityError>();
+builder.Services.AddIdentityCore<User>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 4;
+    options.Password.RequiredUniqueChars = 0;
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-//builder.Services.AddHttpContextAccessor();
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3600);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    // User settings.
+    options.User.AllowedUserNameCharacters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+
+});
+//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderBuyService, OrderBuyService>();
-builder.Services.AddScoped<ILogService,LogService>();
-builder.Services.AddScoped<ICookiService,CookiService>();
-builder.Services.AddScoped<IOrderBuyStatuesService,OrderBuyStatuesService>();
+builder.Services.AddScoped<ILogService, LogService>();
+//builder.Services.AddScoped<ICookiService,CookiService>();
+builder.Services.AddScoped<IOrderBuyStatuesService, OrderBuyStatuesService>();
 
 
 
-builder.Services.AddCors(options => {
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("CORSPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-        options.SlidingExpiration = true;
-        options.AccessDeniedPath = "/Forbidden/";
-    });
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-});
-//builder.Services.AddAuthentication("MyAuthScheme")
-//    .AddCookie("MyAuthScheme", options => {
-//        options.LoginPath = "/Login";
-//        options.LogoutPath = "/Logout";
-//        options.AccessDeniedPath = "/AccessDenied";
-//    });
-//var allowedOrigin = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
-
-// Add services to the container.
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("myAppCors", policy =>
-//    {
-//        policy.WithOrigins(allowedOrigin)
-//                .AllowAnyHeader()
-//                .AllowAnyMethod();
-//    });
-//});
 
 var app = builder.Build();
 app.UseCors("CORSPolicy");
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+// Configure the HTTP request pipeline.
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapIdentityApi<User>();
+app.MapFallbackToFile("/index.html");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -84,18 +84,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 else
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+//app.UseHttpsRedirection();
+//app.UseStaticFiles();
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapControllers();
 app.UseCors("myAppCors");

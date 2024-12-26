@@ -1,8 +1,8 @@
 ﻿using AppShop.Business;
 using AppShop.Business.DataModel;
 using AppShop.Business.Entity;
+using AppShop.Business.IService;
 using AppShop.Business.Service;
-using AppShop.Business.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -111,7 +111,7 @@ namespace AppShop.Controllers
         {
             try
             {
-                var userId = 1;
+                var userId = Guid.NewGuid();
                 var param = new DataRequest(inputRequest.PageNumber, 100);
                 return Ok(service.GetAllUser(param, userId));
             }

@@ -1,6 +1,6 @@
 ﻿using AppShop.Business.Entity;
+using AppShop.Business.IService;
 using AppShop.Business.Mapping;
-using AppShop.Business.Service.IService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace AppShop.Business.Service
             var entity=new Log();
             entity.Massege= message;
             entity.CreateDateTime= DateTime.Now;
-            entity.UserId= 1;
+            entity.UserId= Guid.NewGuid();
             db.Logs.Add(entity);
             db.SaveChanges();
           //  throw new Exception(message);

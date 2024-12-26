@@ -8,7 +8,7 @@ namespace AppShop.Business.Entity
 {
    public class Log:BaseEntity
     {
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public DateTime CreateDateTime { get; set; }
         public string Massege { get; set; }
     }

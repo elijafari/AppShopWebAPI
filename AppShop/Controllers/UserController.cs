@@ -1,6 +1,5 @@
 ﻿using AppShop.Business.Entity;
 using AppShop.Business.Service;
-using AppShop.Business.Service.IService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +8,7 @@ using System.Security.Claims;
 using AppShop.Business.DataModel;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Authorization;
+using AppShop.Business.IService;
 
 namespace AppShop.Controllers
 {
@@ -19,13 +19,13 @@ namespace AppShop.Controllers
 
         private readonly IUserService service;
         private readonly ILogService logService;
-        private readonly ICookiService cookiService;
+//private readonly ICookiService cookiService;
         private readonly IHttpContextAccessor httpContextAccessor;
-        public UserController(IUserService _service, ILogService _logService, ICookiService _cookiService,IHttpContextAccessor _httpContextAccessor)
+        public UserController(IUserService _service, ILogService _logService,IHttpContextAccessor _httpContextAccessor)
         {
             service = _service;
             logService = _logService;
-            cookiService = _cookiService;
+ //           cookiService = _cookiService;
             httpContextAccessor = _httpContextAccessor;
 
         }
@@ -35,7 +35,7 @@ namespace AppShop.Controllers
             try
             {
                 service.Add(entity);
-                var resultAuth = cookiService.SetAuthentication(entity);
+               // var resultAuth = cookiService.SetAuthentication(entity);
                 ////HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(resultAuth.ClaimsIdentity));
                 ////HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 ////  new ClaimsPrincipal(resultAuth.ClaimsIdentity),
@@ -50,14 +50,14 @@ namespace AppShop.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> SignIn(InUser input)
+        public async Task<IActionResult> SignIn([FromBody] InUser input)
         {
             try
             {
                 var user = service.Get(input.UserName, input.Password);
-                var resultAuth = cookiService.SetAuthentication(user);
-                HttpContext.User.AddIdentity(resultAuth.ClaimsIdentity);
-         await httpContextAccessor.  HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(resultAuth.ClaimsIdentity));
+               // var resultAuth = cookiService.SetAuthentication(user);
+         //       HttpContext.User.AddIdentity(resultAuth.ClaimsIdentity);
+         //await httpContextAccessor.  HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(resultAuth.ClaimsIdentity));
                 //await  httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 //        new ClaimsPrincipal(resultAuth.ClaimsIdentity));
 
@@ -91,8 +91,8 @@ namespace AppShop.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        //[Authorize]
-        [HttpPost]
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> SignOut()
         {
             try

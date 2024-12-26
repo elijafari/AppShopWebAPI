@@ -1,5 +1,5 @@
 ﻿using AppShop.Business.Entity;
-using AppShop.Business.Service.IService;
+using AppShop.Business.IService;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
