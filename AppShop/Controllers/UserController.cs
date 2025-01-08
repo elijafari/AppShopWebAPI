@@ -9,6 +9,7 @@ using AppShop.Business.DataModel;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Authorization;
 using AppShop.Business.IService;
+using Microsoft.AspNetCore.Identity;
 
 namespace AppShop.Controllers
 {
@@ -16,95 +17,159 @@ namespace AppShop.Controllers
     [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
     {
-
-        private readonly IUserService service;
-        private readonly ILogService logService;
-//private readonly ICookiService cookiService;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        public UserController(IUserService _service, ILogService _logService,IHttpContextAccessor _httpContextAccessor)
+        private readonly SignInManager<User> signInManager = null;
+        private readonly UserManager<User> userManager = null;
+        public UserController(SignInManager<User> sm, UserManager<User> um)
         {
-            service = _service;
-            logService = _logService;
- //           cookiService = _cookiService;
-            httpContextAccessor = _httpContextAccessor;
-
+            signInManager = sm;
+            userManager = um;
         }
-        [HttpPost]
-        public IActionResult Add(User entity)
+
+        [HttpPost("register")]
+        public async Task<ActionResult> RegisterUser(Login user)
         {
+
+            IdentityResult result = new();
+
             try
             {
-                service.Add(entity);
-               // var resultAuth = cookiService.SetAuthentication(entity);
-                ////HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(resultAuth.ClaimsIdentity));
-                ////HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                ////  new ClaimsPrincipal(resultAuth.ClaimsIdentity),
-                ////  new AuthenticationProperties());
-                ////Request.Cookies.Add(new Cookie());
-                return Ok();
+                User user_ = new User()
+                {
+                    Name = user.Name,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                     Address = user.Address,
+                      City = user.City,
+                };
+
+                result = await userManager.CreateAsync(user_, user.Password);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result);
+                }
             }
             catch (Exception ex)
             {
-                logService.Add(ex.Message, ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return BadRequest("Something went wrong, please try again. " + ex.Message);
             }
+
+            return Ok(new { message = "Registered Successfully.", result = result });
         }
-        [HttpPost]
-        public async Task<IActionResult> SignIn([FromBody] InUser input)
+
+        [HttpPost("registerUserAdmin")]
+        public async Task<ActionResult> RegisterUserAdmin()
         {
+
+            IdentityResult result = new();
+
             try
             {
-                var user = service.Get(input.UserName, input.Password);
-               // var resultAuth = cookiService.SetAuthentication(user);
-         //       HttpContext.User.AddIdentity(resultAuth.ClaimsIdentity);
-         //await httpContextAccessor.  HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(resultAuth.ClaimsIdentity));
-                //await  httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                //        new ClaimsPrincipal(resultAuth.ClaimsIdentity));
+                User user_ = new User()
+                {
+                    Name = "Admin1",
+                    Email ="e.jafari64@gmail.com",
+                    UserName = "Admin",
+                    Address = "افسریه",
+                    City = "تهران",
+                    NormalizedEmail="",
+                };
 
-//                var claims = new List<Claim>
-//{
-//    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-//    new Claim(ClaimTypes.Name, user.UserName),
-//    new Claim(ClaimTypes.Email, user.Email)
-//    // add or remove claims as necessary    
-//};
+                result = await userManager.CreateAsync(user_,"Admin_1231");
 
-//                    AllowRefresh = true,
-//                var claimsIdentity = new ClaimsIdentity(claims, "MyAuthScheme");
-//                var authProperties = new AuthenticationProperties
-//                {
-//                    ExpiresUtc = DateTimeOffset.Now.AddDays(1),
-//                    IsPersistent = true,
-//                };
-                
-//                 httpContextAccessor.HttpContext.SignInAsync("MyAuthScheme",new ClaimsPrincipal(claimsIdentity), authProperties);
-//                //await httpContextAccessor.HttpContext
-//                //    .SignInAsync("MyAuthScheme",
-//                //        new ClaimsPrincipal(claimsIdentity),
-//                //        authProperties);
-//                var isid = httpContextAccessor.HttpContext.User.Identity;
-                return Ok(user);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result);
+                }
             }
             catch (Exception ex)
             {
-                logService.Add(ex.Message, ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return BadRequest("Something went wrong, please try again. " + ex.Message);
             }
+
+            return Ok(new { message = "Registered Successfully.", result = result });
         }
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> SignOut()
+        [HttpPost("login")]
+        public async Task<ActionResult> LoginUser(Login login)
         {
+
             try
             {
-                await httpContextAccessor. HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return Ok();
+                User user_ = await userManager.FindByNameAsync(login.UserName);
+                if (user_ != null)
+                {
+                    login.UserName = user_.UserName;
+
+                    if (!user_.EmailConfirmed)
+                    {
+                        user_.EmailConfirmed = true;
+                    }
+
+                    var result = await signInManager.PasswordSignInAsync(user_, login.Password, false, false);
+
+                    if (!result.Succeeded)
+                    {
+                        return Unauthorized(new { message = "Check your login credentials and try again" });
+                    }
+
+                    user_.LastLogin = DateTime.Now;
+                    var updateResult = await userManager.UpdateAsync(user_);
+                }
+                else
+                {
+                    return BadRequest(new { message = "Please check your credentials and try again. " });
+                }
             }
             catch (Exception ex)
             {
-                logService.Add(ex.Message, ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return BadRequest(new { message = "Something went wrong, please try again. " + ex.Message });
             }
+
+            return Ok(new { message = "Login Successful." });
         }
+
+        [HttpGet("logout"), Authorize]
+        public async Task<ActionResult> LogoutUser()
+        {
+
+            try
+            {
+                await signInManager.SignOutAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Someting went wrong, please try again. " + ex.Message });
+            }
+
+            return Ok(new { message = "You are free to go!" });
+        }
+
+        [HttpGet("xhtlekd")]
+        public async Task<ActionResult> CheckUser()
+        {
+            User currentuser = new();
+
+            try
+            {
+                var user = HttpContext.User;
+                var principals = new ClaimsPrincipal(user);
+                var result = signInManager.IsSignedIn(principals);
+                if (result)
+                {
+                    currentuser = await signInManager.UserManager.GetUserAsync(principals);
+                }
+                else
+                {
+                    return Forbid();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Something went wrong please try again. " + ex.Message });
+            }
+
+            return Ok(new { message = "Logged in", user = currentuser });
+        }
+
     }
 }

@@ -9,7 +9,7 @@ namespace AppShop.Business.Mapping
         public void Configure(EntityTypeBuilder<ItemBuy> builder)
         {
           
-            builder.ToTable("ItemBuyMapping");
+            builder.ToTable("OrderBuyItem");
             builder.HasKey(c => c.Id);
             builder.Property(p => p.Id).UseIdentityColumn();
             builder.Property(p => p.IdOrder).IsRequired();

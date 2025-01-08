@@ -43,7 +43,7 @@ namespace AppShop.Business.ErrorHandle
             return new IdentityError
             {
                 Code = nameof(PasswordRequiresNonAlphanumeric),
-                Description = string.Format("رمز عبور فاقد کاراکتر حرفی است")
+                Description = string.Format("رمز عبور فاقد کاراکترهای -!@#$%^&*_ است")
             };
         }
         public override IdentityError PasswordTooShort(int length)
@@ -52,6 +52,14 @@ namespace AppShop.Business.ErrorHandle
             {
                 Code = nameof(PasswordTooShort),
                 Description = string.Format("رمز عبور حداقل 4 باشد")
+            };
+        }
+        public override IdentityError InvalidEmail(string? email)
+        {
+            return new IdentityError
+            {
+                Code = nameof(InvalidEmail),
+                Description = string.Format("پست الکترونیکی وارد شده معتیر نیست")
             };
         }
     }

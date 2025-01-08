@@ -25,7 +25,7 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddIdentityApiEndpoints<User>()
-    .AddEntityFrameworkStores<AppShopDBContext>()
+  .AddEntityFrameworkStores<AppShopDBContext>()
   .AddErrorDescriber<UserIdentityError>();
 builder.Services.AddIdentityCore<User>(options =>
 {

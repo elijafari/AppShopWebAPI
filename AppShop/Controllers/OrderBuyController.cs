@@ -4,8 +4,10 @@ using AppShop.Business.Entity;
 using AppShop.Business.IService;
 using AppShop.Business.Service;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace AppShop.Controllers
 {
@@ -27,7 +29,7 @@ namespace AppShop.Controllers
         {
             try
             {
-                return Ok(service.Add(input));
+                    return Ok(service.Add(input));
             }
             catch (Exception ex)
             {
